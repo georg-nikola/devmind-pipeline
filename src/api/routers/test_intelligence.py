@@ -3,10 +3,11 @@ Test intelligence API endpoints.
 Provides ML-powered test selection and optimization.
 """
 
+from typing import Any, Dict, List, Optional
+
+import structlog
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
-import structlog
 
 logger = structlog.get_logger(__name__)
 
@@ -15,6 +16,7 @@ router = APIRouter()
 
 class TestSelectionRequest(BaseModel):
     """Request schema for intelligent test selection."""
+
     project_name: str
     commit_hash: str
     changed_files: List[str]
@@ -23,6 +25,7 @@ class TestSelectionRequest(BaseModel):
 
 class TestSelectionResponse(BaseModel):
     """Response schema for test selection."""
+
     project_name: str
     total_tests: int
     selected_tests: List[str]
@@ -42,24 +45,30 @@ async def select_tests(request: TestSelectionRequest):
     - Predict test impact
     - Optimize for coverage vs time
     """
-    logger.info("Selecting tests", project=request.project_name, commit=request.commit_hash)
+    logger.info(
+        "Selecting tests", project=request.project_name, commit=request.commit_hash
+    )
 
     # Placeholder ML inference
     all_tests = request.all_tests or []
-    selected = all_tests[:int(len(all_tests) * 0.4)] if all_tests else [
-        "tests/auth/test_login.py",
-        "tests/api/test_users.py",
-        "tests/integration/test_auth_flow.py"
-    ]
+    selected = (
+        all_tests[: int(len(all_tests) * 0.4)]
+        if all_tests
+        else [
+            "tests/auth/test_login.py",
+            "tests/api/test_users.py",
+            "tests/integration/test_auth_flow.py",
+        ]
+    )
 
     return TestSelectionResponse(
         project_name=request.project_name,
         total_tests=len(all_tests) or 250,
         selected_tests=selected,
-        skipped_tests=all_tests[len(selected):] if all_tests else [],
+        skipped_tests=all_tests[len(selected) :] if all_tests else [],
         estimated_time_savings=60.5,
         coverage_retention=0.95,
-        confidence=0.91
+        confidence=0.91,
     )
 
 
@@ -77,15 +86,15 @@ async def detect_flaky_tests(project_name: str, days: int = 30):
                 "test_name": "tests/integration/test_payment_flow.py::test_concurrent_transactions",
                 "flakiness_score": 0.35,
                 "failure_rate": 0.12,
-                "recommendation": "Add retry logic or increase timeout"
+                "recommendation": "Add retry logic or increase timeout",
             },
             {
                 "test_name": "tests/e2e/test_user_registration.py::test_email_verification",
                 "flakiness_score": 0.28,
                 "failure_rate": 0.08,
-                "recommendation": "Mock email service for more reliable testing"
-            }
-        ]
+                "recommendation": "Mock email service for more reliable testing",
+            },
+        ],
     }
 
 
@@ -97,24 +106,19 @@ async def analyze_coverage(project_name: str):
     return {
         "project_name": project_name,
         "overall_coverage": 82.5,
-        "by_module": {
-            "auth": 95.2,
-            "api": 88.7,
-            "core": 76.3,
-            "utils": 65.8
-        },
+        "by_module": {"auth": 95.2, "api": 88.7, "core": 76.3, "utils": 65.8},
         "uncovered_critical_paths": [
             {
                 "path": "core/payment/processor.py",
                 "coverage": 45.2,
                 "risk": "high",
-                "suggestion": "Add tests for error handling in payment processing"
+                "suggestion": "Add tests for error handling in payment processing",
             }
         ],
         "suggested_tests": [
             "Add tests for core/payment/processor.py error paths",
-            "Increase utils/ coverage with edge case tests"
-        ]
+            "Increase utils/ coverage with edge case tests",
+        ],
     }
 
 
@@ -132,17 +136,17 @@ async def optimize_test_suite(project_name: str):
             {
                 "type": "parallel_execution",
                 "description": "Run 45 independent test suites in parallel",
-                "impact": "120s savings"
+                "impact": "120s savings",
             },
             {
                 "type": "test_ordering",
                 "description": "Run fast-failing tests first",
-                "impact": "80s average savings on failures"
+                "impact": "80s average savings on failures",
             },
             {
                 "type": "remove_redundant",
                 "description": "Remove 15 redundant integration tests",
-                "impact": "52s savings"
-            }
-        ]
+                "impact": "52s savings",
+            },
+        ],
     }

@@ -3,10 +3,11 @@ Build optimization API endpoints.
 Provides ML-powered build time optimization and caching strategies.
 """
 
+from typing import Any, Dict, List, Optional
+
+import structlog
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
-import structlog
 
 logger = structlog.get_logger(__name__)
 
@@ -15,6 +16,7 @@ router = APIRouter()
 
 class BuildOptimizationRequest(BaseModel):
     """Request schema for build optimization."""
+
     project_name: str
     dependency_graph: Optional[Dict[str, List[str]]] = None
     historical_build_times: Optional[List[float]] = None
@@ -23,6 +25,7 @@ class BuildOptimizationRequest(BaseModel):
 
 class BuildOptimizationResponse(BaseModel):
     """Response schema for build optimization."""
+
     project_name: str
     recommended_strategy: str
     estimated_build_time: float
@@ -53,20 +56,20 @@ async def optimize_build(request: BuildOptimizationRequest):
             {
                 "type": "dependency_analysis",
                 "description": "Identified 15 independent modules for parallel execution",
-                "impact": "high"
+                "impact": "high",
             },
             {
                 "type": "caching",
                 "description": "Enable layer caching for Docker builds",
-                "impact": "medium"
+                "impact": "medium",
             },
             {
                 "type": "resource_allocation",
                 "description": "Increase CPU allocation from 2 to 4 cores",
-                "impact": "high"
-            }
+                "impact": "high",
+            },
         ],
-        confidence_score=0.89
+        confidence_score=0.89,
     )
 
 
@@ -81,9 +84,9 @@ async def get_cache_strategy(project_name: str):
         "cache_layers": [
             {"layer": "dependencies", "cache_hit_rate": 0.85, "size_mb": 250},
             {"layer": "build_artifacts", "cache_hit_rate": 0.72, "size_mb": 180},
-            {"layer": "test_data", "cache_hit_rate": 0.90, "size_mb": 50}
+            {"layer": "test_data", "cache_hit_rate": 0.90, "size_mb": 50},
         ],
-        "total_cache_savings": "35%"
+        "total_cache_savings": "35%",
     }
 
 
@@ -101,5 +104,5 @@ async def get_build_statistics(project_name: str, days: int = 30):
         "average_build_time": 180.5,
         "median_build_time": 165.2,
         "p95_build_time": 245.8,
-        "trend": "improving"
+        "trend": "improving",
     }

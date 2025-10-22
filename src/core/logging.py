@@ -36,14 +36,12 @@ def setup_logging(log_level: str = "INFO") -> None:
 
     if sys.stderr.isatty():
         # Pretty printing for development
-        processors = shared_processors + [
-            structlog.dev.ConsoleRenderer()
-        ]
+        processors = shared_processors + [structlog.dev.ConsoleRenderer()]
     else:
         # JSON output for production
         processors = shared_processors + [
             structlog.processors.format_exc_info,
-            structlog.processors.JSONRenderer()
+            structlog.processors.JSONRenderer(),
         ]
 
     structlog.configure(

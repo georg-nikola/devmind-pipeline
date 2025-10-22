@@ -4,7 +4,8 @@ Manages lifecycle of ML models and services.
 """
 
 import asyncio
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
 import structlog
 
 logger = structlog.get_logger(__name__)
@@ -32,11 +33,7 @@ class MLServiceManager:
         logger.info("Loading ML models")
 
         # Simulate loading models
-        models_to_load = [
-            "build_optimizer",
-            "failure_predictor",
-            "test_selector"
-        ]
+        models_to_load = ["build_optimizer", "failure_predictor", "test_selector"]
 
         for model_name in models_to_load:
             logger.info("Loading model", model=model_name)
@@ -45,7 +42,7 @@ class MLServiceManager:
                 "name": model_name,
                 "version": "1.0.0",
                 "loaded": True,
-                "accuracy": 0.89
+                "accuracy": 0.89,
             }
 
         logger.info("All models loaded", count=len(self.models))
@@ -53,15 +50,12 @@ class MLServiceManager:
     async def health_check(self) -> Dict[str, Any]:
         """Check health of ML services."""
         if not self.initialized:
-            return {
-                "healthy": False,
-                "reason": "Service not initialized"
-            }
+            return {"healthy": False, "reason": "Service not initialized"}
 
         return {
             "healthy": True,
             "models_loaded": len(self.models),
-            "models": list(self.models.keys())
+            "models": list(self.models.keys()),
         }
 
     async def get_models_status(self) -> Dict[str, Any]:
@@ -72,7 +66,7 @@ class MLServiceManager:
                     "name": name,
                     "status": "loaded",
                     "version": model.get("version"),
-                    "accuracy": model.get("accuracy")
+                    "accuracy": model.get("accuracy"),
                 }
                 for name, model in self.models.items()
             ]
