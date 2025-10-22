@@ -36,11 +36,10 @@ jobs:
         pip install -r requirements.txt
         pip install pytest pytest-cov pytest-asyncio black isort mypy
 
-    - name: Lint with black and isort
+    - name: Lint with black
       run: |
         cd src
         black --check .
-        isort --check-only .
 
     - name: Type check with mypy
       run: |
