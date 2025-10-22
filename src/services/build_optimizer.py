@@ -14,14 +14,15 @@ import pandas as pd
 import structlog
 import xgboost as xgb
 
+from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
 from models.build_data import (
     BuildData,
     BuildOptimizationRequest,
     BuildOptimizationResponse,
 )
-from sklearn.metrics import mean_absolute_error, r2_score
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 from utils.caching import CacheManager
 from utils.feature_engineering import FeatureEngineer
 from utils.metrics import ModelMetrics
