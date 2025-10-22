@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 import structlog
 import xgboost as xgb
+
 from models.build_data import (
     BuildData,
     BuildOptimizationRequest,
