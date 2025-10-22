@@ -13,8 +13,11 @@ import numpy as np
 import pandas as pd
 import structlog
 import xgboost as xgb
-from models.build_data import (BuildData, BuildOptimizationRequest,
-                               BuildOptimizationResponse)
+from models.build_data import (
+    BuildData,
+    BuildOptimizationRequest,
+    BuildOptimizationResponse,
+)
 from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
