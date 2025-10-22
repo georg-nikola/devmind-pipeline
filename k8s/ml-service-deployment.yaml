@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devmind-ml-service
+  namespace: devmind-pipeline
+  labels:
+    app: devmind-ml-service
+    component: ml-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devmind-ml-service
+  template:
+    metadata:
+      labels:
+        app: devmind-ml-service
+        component: ml-api
+    spec:
+      containers:
+      - name: ml-service
+        image: python:3.11-slim
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            apt-get update && apt-get install -y git curl
+            cd /app
+            pip install --no-cache-dir -r requirements.txt
+            uvicorn main:app --host 0.0.0.0 --port 8000
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+        env:
+        - name: ENVIRONMENT
+          value: "local"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: APP_NAME
+          value: "DevMind Pipeline ML Services"
+        volumeMounts:
+        - name: app-code
+          mountPath: /app
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 300
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 300
+          periodSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+      volumes:
+      - name: app-code
+        hostPath:
+          # Note: Update this path to match your local directory
+          # For OrbStack, use: /Users/<username>/repos/devmind-pipeline/src
+          path: /tmp/devmind-pipeline/src
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devmind-ml-service
+  namespace: devmind-pipeline
+  labels:
+    app: devmind-ml-service
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+  selector:
+    app: devmind-ml-service
