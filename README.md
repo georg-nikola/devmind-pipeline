@@ -2,11 +2,11 @@
 
 > **AI-augmented DevOps pipeline with intelligent optimization**
 
+[![CI/CD](https://github.com/georg-nikola/devmind-pipeline/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/georg-nikola/devmind-pipeline/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/release/python-3110/)
-[![Go 1.21+](https://img.shields.io/badge/go-1.21+-00ADD8.svg)](https://golang.org/)
-[![React 18](https://img.shields.io/badge/react-18.x-61DAFB.svg)](https://reactjs.org/)
-[![Kubernetes](https://img.shields.io/badge/kubernetes-v1.28+-326ce5.svg)](https://kubernetes.io/)
+[![Kubernetes](https://img.shields.io/badge/kubernetes-ready-326ce5.svg)](https://kubernetes.io/)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/georg-nikola/devmind-pipeline/releases)
 
 ## 🚀 Overview
 
@@ -124,7 +124,7 @@ devmind-pipeline/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/devmind-pipeline.git
+   git clone https://github.com/georg-nikola/devmind-pipeline.git
    cd devmind-pipeline
    ```
 
@@ -140,20 +140,33 @@ devmind-pipeline/
    cd web && npm install
    ```
 
-3. **Deploy to Kubernetes**
+3. **Deploy to Kubernetes (OrbStack/Local)**
    ```bash
-   # Deploy using Helm
-   helm install devmind-pipeline deployments/helm/devmind-pipeline/
-   
-   # Or use kubectl
-   kubectl apply -f deployments/kubernetes/
+   # Create namespace and deploy services
+   kubectl apply -f k8s/namespace.yaml
+   kubectl apply -f k8s/
+
+   # Wait for services to be ready
+   kubectl wait --for=condition=ready pod -l app=devmind-ml-service -n devmind-pipeline --timeout=600s
    ```
 
-4. **Access the dashboard**
+4. **Access the services**
    ```bash
-   kubectl port-forward service/devmind-web 3000:3000
+   # Use the convenience script
+   ./start-dashboards.sh
+
+   # Or manually port-forward
+   kubectl port-forward -n devmind-pipeline svc/devmind-ml-service 8000:8000 &
+   kubectl port-forward -n devmind-pipeline svc/grafana 3000:3000 &
+   kubectl port-forward -n devmind-pipeline svc/prometheus 9090:9090 &
    ```
-   Open http://localhost:3000
+
+   **Available Endpoints:**
+   - ML API Docs: http://localhost:8000/docs
+   - Grafana Dashboard: http://localhost:3000 (admin/admin)
+   - Prometheus Metrics: http://localhost:9090
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
 
 ## 📊 AI Model Details
 
