@@ -13,11 +13,11 @@ import numpy as np
 import pandas as pd
 import structlog
 import xgboost as xgb
-
 from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+from core.config import get_ml_model_config, get_settings
 from models.build_data import (
     BuildData,
     BuildOptimizationRequest,
@@ -26,8 +26,6 @@ from models.build_data import (
 from utils.caching import CacheManager
 from utils.feature_engineering import FeatureEngineer
 from utils.metrics import ModelMetrics
-
-from core.config import get_ml_model_config, get_settings
 
 logger = structlog.get_logger(__name__)
 
