@@ -153,14 +153,15 @@ jobs:
       with:
         scan-type: 'fs'
         scan-ref: '.'
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-    
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
-      if: always()
-      with:
-        sarif_file: 'trivy-results.sarif'
+        format: 'table'
+        severity: 'CRITICAL,HIGH'
+
+    # Note: SARIF upload requires GitHub Advanced Security
+    # - name: Upload Trivy scan results to GitHub Security tab
+    #   uses: github/codeql-action/upload-sarif@v2
+    #   if: always()
+    #   with:
+    #     sarif_file: 'trivy-results.sarif'
     
     - name: Python Security Scan
       run: |
