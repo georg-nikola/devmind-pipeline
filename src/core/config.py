@@ -6,7 +6,8 @@ import os
 from functools import lru_cache
 from typing import List, Optional
 
-from pydantic import BaseSettings, Field
+from pydantic import Field
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -115,6 +116,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "ignore"
 
 
 class MLModelConfig:
