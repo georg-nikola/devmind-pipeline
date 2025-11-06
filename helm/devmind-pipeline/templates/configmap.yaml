@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "devmind-pipeline.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "devmind-pipeline.labels" . | nindent 4 }}
+data:
+  # Application settings
+  APP_NAME: {{ .Values.config.appName | quote }}
+  LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  LOG_FORMAT: {{ .Values.config.logFormat | quote }}
+
+  # Server settings
+  HOST: {{ .Values.config.host | quote }}
+  PORT: {{ .Values.config.port | quote }}
+  WORKERS: {{ .Values.config.workers | quote }}
+
+  # ML Model settings
+  MODEL_STORAGE_PATH: {{ .Values.config.modelStoragePath | quote }}
+  AUTO_RETRAIN: {{ .Values.config.autoRetrain | quote }}
+  RETRAIN_THRESHOLD: {{ .Values.config.retrainThreshold | quote }}
+  MIN_TRAINING_SAMPLES: {{ .Values.config.minTrainingSamples | quote }}
+
+  # Performance settings
+  MAX_CONCURRENT_PREDICTIONS: {{ .Values.config.maxConcurrentPredictions | quote }}
+  PREDICTION_TIMEOUT: {{ .Values.config.predictionTimeout | quote }}
+  CACHE_TTL: {{ .Values.config.cacheTTL | quote }}
+  MAX_BATCH_SIZE: {{ .Values.config.maxBatchSize | quote }}
+  FEATURE_EXTRACTION_TIMEOUT: {{ .Values.config.featureExtractionTimeout | quote }}
+
+  # Feature flags
+  ENABLE_PROMETHEUS_METRICS: {{ .Values.config.enablePrometheusMetrics | quote }}
+  ENABLE_DISTRIBUTED_TRACING: {{ .Values.config.enableDistributedTracing | quote }}
+  ENABLE_MODEL_EXPLANATIONS: {{ .Values.config.enableModelExplanations | quote }}
+
+  # CORS settings
+  ALLOWED_ORIGINS: {{ .Values.config.allowedOrigins | quote }}

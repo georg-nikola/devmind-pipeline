@@ -212,29 +212,113 @@ When adding tests:
 
 ## GitOps Deployment Strategy
 
-This project uses **ArgoCD** for GitOps-based deployments to the production Talos Kubernetes cluster.
+This project uses **Helm + ArgoCD** for GitOps-based deployments to the production Talos Kubernetes cluster.
 
-### Architecture
+### Architecture: Public Helm Chart + Private Values Overlay
+
+This repo contains a **public Helm chart** with generic defaults. The private infrastructure repo (`talos-configs`) contains **production-specific values** that overlay the chart at deployment time.
 
 ```
-GitHub Repo (main branch)           ArgoCD              Production Cluster
-─────────────────────────            ──────              ──────────────────
-k8s/production/                       │
-├── deployment-patch.yaml  ──────────►│──────────────►   devmind-pipeline namespace
-├── configmap-override.yaml           │                   (Talos K8s Cluster)
-├── ingressroute.yaml                 │
-└── (base manifests referenced)       │
-                                      │
-                                Auto-sync every 3 min
-                                Self-heal on drift
+PUBLIC REPO (this)                     PRIVATE REPO (talos-configs)
+──────────────────                     ────────────────────────────
+helm/devmind-pipeline/                 manifests/argocd/
+├── Chart.yaml                         ├── application-devmind.yaml  (ArgoCD App + values)
+├── values.yaml (defaults)             └── values/
+└── templates/                             └── devmind-pipeline-production.yaml
+    ├── deployment.yaml
+    ├── service.yaml                           ↓
+    ├── configmap.yaml                    ArgoCD combines
+    └── ...                                    ↓
+                                        Production Cluster
+                                        ──────────────────
+                                        devmind-pipeline namespace
+                                        (Talos K8s Cluster)
+```
+
+**Key Benefits:**
+- ✅ Public repo stays generic and shareable (no secrets, domains, or IPs)
+- ✅ Private values (domains, secrets, replicas) managed separately
+- ✅ Helm templating provides flexibility
+- ✅ ArgoCD auto-syncs changes from both repos
+
+### Repository Structure
+
+#### Public Repo (THIS REPO - devmind-pipeline)
+
+```
+helm/devmind-pipeline/               # Helm chart (public/generic)
+├── Chart.yaml                       # Chart metadata
+├── values.yaml                      # Default values (no secrets!)
+├── README.md                        # Helm chart documentation
+└── templates/                       # Kubernetes manifest templates
+    ├── _helpers.tpl
+    ├── deployment.yaml
+    ├── service.yaml
+    ├── configmap.yaml
+    ├── secret.yaml
+    ├── ingressroute.yaml
+    └── namespace.yaml
+
+k8s/                                 # Legacy raw manifests (for reference)
+├── base/                            # Kept for local development
+├── production/                      # Being deprecated in favor of Helm
+└── local/
+```
+
+#### Private Repo (talos-configs - NOT PUBLIC)
+
+```
+manifests/argocd/
+├── application-devmind.yaml         # ArgoCD Application with values overlay
+└── values/
+    └── devmind-pipeline-production.yaml  # Production-specific overrides
 ```
 
 ### Deployment Workflow
 
-1. **Make changes** to Kubernetes manifests in `k8s/production/` or `k8s/base/`
-2. **Commit and push** to the `main` branch on GitHub
-3. **ArgoCD automatically syncs** within 3 minutes (or manual sync via UI/CLI)
-4. **Changes are deployed** to production cluster
+**Option 1: Update Application Code or Chart (most common)**
+
+1. **Make changes** to code, Dockerfile, or Helm templates
+2. **Build and push** Docker image to GHCR:
+   ```bash
+   docker build -t ghcr.io/YOUR_USERNAME/devmind-ml-service:v1.2.3 .
+   docker push ghcr.io/YOUR_USERNAME/devmind-ml-service:v1.2.3
+   ```
+3. **Update image tag** in `helm/devmind-pipeline/values.yaml`:
+   ```yaml
+   image:
+     tag: v1.2.3  # Update this
+   ```
+4. **Commit and push** to GitHub `main` branch
+5. **ArgoCD automatically detects** change and syncs within 3 minutes
+6. **ArgoCD templates** Helm chart with private production values
+7. **Kubernetes performs** rolling update to new version
+
+**Option 2: Update Production Configuration**
+
+1. Update values in private repo's `application-devmind.yaml` or `values/devmind-pipeline-production.yaml`
+2. Commit and apply: `kubectl apply -f manifests/argocd/application-devmind.yaml`
+3. ArgoCD re-syncs with new values
+
+**Option 3: Local Helm Testing**
+
+```bash
+# Test Helm template rendering
+cd helm/devmind-pipeline
+helm template devmind-pipeline . --values values.yaml
+
+# Test with production-like values
+helm template devmind-pipeline . --values values.yaml \
+  --set image.repository=ghcr.io/myuser/devmind-ml-service \
+  --set image.tag=v1.0.0 \
+  --set replicaCount=2
+
+# Install locally (OrbStack)
+helm install devmind-pipeline . \
+  --namespace devmind-pipeline \
+  --create-namespace \
+  --values values.yaml
+```
 
 ### Manual Deployment Commands
 

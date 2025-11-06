@@ -1,0 +1,170 @@
+# Default values for devmind-pipeline Helm chart
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Application metadata
+nameOverride: ""
+fullnameOverride: ""
+
+# Image configuration
+image:
+  registry: ghcr.io
+  repository: YOUR_GITHUB_USERNAME/devmind-ml-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Deployment configuration
+replicaCount: 1
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 8000
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8000"
+    prometheus.io/path: "/metrics"
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: devmind.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Traefik IngressRoute (alternative to standard Ingress)
+ingressRoute:
+  enabled: false
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`devmind.example.com`)
+      kind: Rule
+      services:
+        - name: devmind-ml-service
+          port: 8000
+
+# Resource limits
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 2Gi
+
+# Autoscaling
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+# Health checks
+healthChecks:
+  startup:
+    enabled: true
+    path: /health
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 30
+  liveness:
+    enabled: true
+    path: /health
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  readiness:
+    enabled: true
+    path: /health
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+# Application configuration
+config:
+  appName: "DevMind Pipeline ML Services"
+  logLevel: "info"
+  logFormat: "json"
+  host: "0.0.0.0"
+  port: "8000"
+  workers: "2"
+
+  # ML Model settings
+  modelStoragePath: "/app/models"
+  autoRetrain: "false"
+  retrainThreshold: "0.05"
+  minTrainingSamples: "1000"
+
+  # Performance settings
+  maxConcurrentPredictions: "50"
+  predictionTimeout: "30"
+  cacheTTL: "3600"
+  maxBatchSize: "100"
+  featureExtractionTimeout: "300"
+
+  # Feature flags
+  enablePrometheusMetrics: "true"
+  enableDistributedTracing: "false"
+  enableModelExplanations: "false"
+
+  # CORS settings
+  allowedOrigins: "http://localhost:3000"
+
+# Secrets (use external secret management in production)
+secrets:
+  # Database
+  databaseUrl: "postgresql://user:pass@localhost:5432/devmind"
+
+  # Redis
+  redisUrl: "redis://localhost:6379/0"
+
+  # Application secret key
+  secretKey: "change-me-in-production"
+
+  # MLflow tracking
+  mlflowTrackingUri: "http://mlflow:5000"
+
+# Prometheus monitoring
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
+
+# Pod annotations
+podAnnotations: {}
+
+# Pod labels
+podLabels: {}
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity rules
+affinity: {}
