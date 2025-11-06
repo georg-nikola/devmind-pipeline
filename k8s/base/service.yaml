@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: devmind-ml-service
+  namespace: devmind-pipeline
+  labels:
+    app: devmind-ml-service
+    app.kubernetes.io/name: devmind-ml-service
+    app.kubernetes.io/component: ml-api
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8000"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+  selector:
+    app: devmind-ml-service

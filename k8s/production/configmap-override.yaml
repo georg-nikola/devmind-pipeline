@@ -1,0 +1,43 @@
+# Production-specific ConfigMap overrides
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devmind-ml-config
+  namespace: devmind-pipeline
+  labels:
+    app: devmind-ml-service
+    environment: production
+data:
+  # Application settings
+  APP_NAME: "DevMind Pipeline ML Services"
+  LOG_LEVEL: "info"
+  LOG_FORMAT: "json"
+
+  # Server settings
+  HOST: "0.0.0.0"
+  PORT: "8000"
+  WORKERS: "4"
+
+  # ML Model settings
+  MODEL_STORAGE_PATH: "/app/models"
+  AUTO_RETRAIN: "true"
+  RETRAIN_THRESHOLD: "0.05"
+  MIN_TRAINING_SAMPLES: "1000"
+
+  # Performance settings
+  MAX_CONCURRENT_PREDICTIONS: "100"
+  PREDICTION_TIMEOUT: "30"
+  CACHE_TTL: "3600"
+  MAX_BATCH_SIZE: "1000"
+  FEATURE_EXTRACTION_TIMEOUT: "300"
+
+  # Feature flags
+  ENABLE_PROMETHEUS_METRICS: "true"
+  ENABLE_DISTRIBUTED_TRACING: "true"
+  ENABLE_MODEL_EXPLANATIONS: "true"
+
+  # Production CORS origins (update with your domain)
+  ALLOWED_ORIGINS: "https://devmind.example.com,https://devmind-api.example.com"
+
+  # Prometheus endpoint
+  PROMETHEUS_URL: "http://kube-prometheus-stack-prometheus.monitoring:9090"

@@ -1,0 +1,18 @@
+# NodePort service for local access
+apiVersion: v1
+kind: Service
+metadata:
+  name: devmind-ml-service-nodeport
+  namespace: devmind-pipeline
+  labels:
+    app: devmind-ml-service
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    nodePort: 30800  # Access at http://localhost:30800 on OrbStack
+    protocol: TCP
+  selector:
+    app: devmind-ml-service

@@ -1,0 +1,39 @@
+# Production IngressRoute for DevMind Pipeline ML Service
+# Protected by Cloudflare Zero Trust Access
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: devmind-ml-api
+  namespace: devmind-pipeline
+  labels:
+    app: devmind-ml-service
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`devmind.example.com`)
+    kind: Rule
+    services:
+    - name: devmind-ml-service
+      port: 8000
+
+---
+# Optional: Dashboard/Docs route (if you want to expose separate URL for docs)
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: devmind-ml-docs
+  namespace: devmind-pipeline
+  labels:
+    app: devmind-ml-service
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`devmind-api.example.com`) && PathPrefix(`/docs`)
+    kind: Rule
+    services:
+    - name: devmind-ml-service
+      port: 8000

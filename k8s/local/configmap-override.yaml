@@ -1,0 +1,40 @@
+# Local development ConfigMap overrides
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devmind-ml-config
+  namespace: devmind-pipeline
+  labels:
+    app: devmind-ml-service
+    environment: development
+data:
+  # Application settings
+  APP_NAME: "DevMind Pipeline ML Services (Local)"
+  LOG_LEVEL: "debug"
+  LOG_FORMAT: "console"
+
+  # Server settings
+  HOST: "0.0.0.0"
+  PORT: "8000"
+  WORKERS: "1"
+
+  # ML Model settings
+  MODEL_STORAGE_PATH: "/app/models"
+  AUTO_RETRAIN: "false"  # Disable auto-retrain in local
+  RETRAIN_THRESHOLD: "0.05"
+  MIN_TRAINING_SAMPLES: "100"  # Lower threshold for local testing
+
+  # Performance settings
+  MAX_CONCURRENT_PREDICTIONS: "10"
+  PREDICTION_TIMEOUT: "30"
+  CACHE_TTL: "300"
+  MAX_BATCH_SIZE: "100"
+  FEATURE_EXTRACTION_TIMEOUT: "60"
+
+  # Feature flags
+  ENABLE_PROMETHEUS_METRICS: "true"
+  ENABLE_DISTRIBUTED_TRACING: "false"  # Disable tracing in local
+  ENABLE_MODEL_EXPLANATIONS: "true"
+
+  # Local CORS origins (allow localhost)
+  ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:8080,http://localhost:8000"

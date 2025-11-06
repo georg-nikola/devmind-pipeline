@@ -1,0 +1,173 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devmind-ml-service
+  namespace: devmind-pipeline
+  labels:
+    app: devmind-ml-service
+    app.kubernetes.io/name: devmind-ml-service
+    app.kubernetes.io/component: ml-api
+    app.kubernetes.io/part-of: devmind-pipeline
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: devmind-ml-service
+  template:
+    metadata:
+      labels:
+        app: devmind-ml-service
+        app.kubernetes.io/name: devmind-ml-service
+        app.kubernetes.io/component: ml-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: ml-service
+        image: devmind-ml-service:latest  # Will be overridden per environment
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+        env:
+        # Environment from ConfigMap
+        - name: ENVIRONMENT
+          value: "production"
+        - name: APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: APP_NAME
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: LOG_LEVEL
+        - name: LOG_FORMAT
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: LOG_FORMAT
+        - name: HOST
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: HOST
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: PORT
+        - name: WORKERS
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: WORKERS
+        - name: MODEL_STORAGE_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: MODEL_STORAGE_PATH
+        - name: AUTO_RETRAIN
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: AUTO_RETRAIN
+        - name: ALLOWED_ORIGINS
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: ALLOWED_ORIGINS
+        - name: ENABLE_PROMETHEUS_METRICS
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: ENABLE_PROMETHEUS_METRICS
+
+        # Secrets
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: devmind-ml-secrets
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: devmind-ml-secrets
+              key: REDIS_URL
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: devmind-ml-secrets
+              key: SECRET_KEY
+        - name: MLFLOW_TRACKING_URI
+          valueFrom:
+            secretKeyRef:
+              name: devmind-ml-secrets
+              key: MLFLOW_TRACKING_URI
+              optional: true
+
+        # Resource limits
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+
+        # Probes
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+
+        # Security context
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: false  # Set to true if app doesn't need to write
+
+        # Volume mounts (for model storage if needed)
+        volumeMounts:
+        - name: models
+          mountPath: /app/models
+
+      # Volumes
+      volumes:
+      - name: models
+        emptyDir: {}  # Use PVC in production if models need persistence

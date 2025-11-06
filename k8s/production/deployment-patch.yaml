@@ -1,0 +1,24 @@
+# Production deployment patch
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devmind-ml-service
+  namespace: devmind-pipeline
+spec:
+  replicas: 2  # Production should have at least 2 replicas for HA
+  template:
+    spec:
+      containers:
+      - name: ml-service
+        image: ghcr.io/YOUR_GITHUB_USERNAME/devmind-ml-service:latest  # Update with your GitHub username
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: DEBUG
+          value: "false"
+        # Use production Prometheus
+        - name: PROMETHEUS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: devmind-ml-config
+              key: PROMETHEUS_URL

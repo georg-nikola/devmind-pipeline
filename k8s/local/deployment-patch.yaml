@@ -1,0 +1,26 @@
+# Local development deployment patch
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devmind-ml-service
+  namespace: devmind-pipeline
+spec:
+  replicas: 1  # Single replica for local development
+  template:
+    spec:
+      containers:
+      - name: ml-service
+        image: devmind-ml-service:local  # Local image tag
+        imagePullPolicy: Never  # Don't pull, use local image
+        env:
+        - name: ENVIRONMENT
+          value: "development"
+        - name: DEBUG
+          value: "true"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"

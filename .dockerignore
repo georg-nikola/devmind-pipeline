@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+.pytest_cache
+.mypy_cache
+.coverage
+htmlcov
+*.log
+
+# Virtual environments
+src/venv
+venv
+env
+ENV
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Documentation
+*.md
+docs/
+README.md
+CONTRIBUTING.md
+CHANGELOG.md
+LICENSE
+
+# Kubernetes
+k8s/
+deployments/
+
+# CI/CD
+.github/
+
+# Other
+.DS_Store
+*.tmp
+demo.sh
+start-dashboards.sh
