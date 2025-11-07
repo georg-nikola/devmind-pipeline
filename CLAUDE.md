@@ -16,44 +16,79 @@ This is currently a **demonstration/portfolio project** - the Python ML services
 
 ### Python ML Services (Primary Component)
 
+#### Setup (One-Time)
+
 ```bash
 # Navigate to Python source
 cd src
 
-# Install dependencies
-pip install -r requirements.txt
+# Create virtual environment
+python3 -m venv venv
 
-# Install development dependencies
-pip install pytest pytest-cov pytest-asyncio black mypy
+# Activate virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
+
+# Install all dependencies (including test tools)
+pip install -r requirements.txt
+```
+
+#### Running the Application
+
+```bash
+# From src directory with venv activated
 
 # Run the ML service locally
 python -m uvicorn main:app --reload
 # Access at http://localhost:8000/docs
+# API documentation available at http://localhost:8000/api/v1/docs
 
-# Run with specific configuration
+# Or run directly
 python main.py
 ```
 
 ### Code Quality & Testing
 
 ```bash
+# All commands assume you're in src/ with venv activated
+
 # Format code with Black (line length: 100)
-cd src
 black .
 black --check .  # Check without modifying
 
 # Type checking (currently lenient)
 mypy . --ignore-missing-imports
 
-# Run tests (when test suite exists)
+# Run tests with coverage
 pytest tests/ -v
 pytest tests/ --cov=. --cov-report=html
+pytest tests/ --cov=. --cov-report=term-missing
+
+# Run specific test file
+pytest tests/test_config.py -v
+
+# Run specific test class
+pytest tests/test_config.py::TestAllowedOrigins -v
+
+# Run specific test
+pytest tests/test_config.py::TestAllowedOrigins::test_allowed_origins_default -v
 
 # Security scanning
-pip install safety bandit
 safety check -r requirements.txt
 bandit -r . -f json
 ```
+
+#### Virtual Environment Notes
+
+Always use a virtual environment for development to avoid system-wide package conflicts:
+
+- **Activate before working**: `source venv/bin/activate`
+- **Deactivate when done**: `deactivate`
+- **Check if active**: Your prompt should show `(venv)` prefix
+- **For zsh/bash profile**: Add activation to your shell profile for convenience
+- **Do NOT commit venv**: `venv/` is in `.gitignore` and should never be committed
 
 ### Kubernetes Deployment
 
