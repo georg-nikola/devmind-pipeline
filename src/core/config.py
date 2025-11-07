@@ -30,24 +30,17 @@ class Settings(BaseSettings):
 
     # Security
     SECRET_KEY: str = Field(default="dev-secret-key", env="SECRET_KEY")
-    ALLOWED_ORIGINS: List[str] = Field(
-        default=["http://localhost:3000", "http://localhost:8080"],
+    ALLOWED_ORIGINS_STR: str = Field(
+        default="http://localhost:3000,http://localhost:8080",
         env="ALLOWED_ORIGINS",
     )
 
-    @field_validator("ALLOWED_ORIGINS", mode="before")
-    @classmethod
-    def parse_allowed_origins(cls, v):
-        """Parse ALLOWED_ORIGINS from comma-separated string or list."""
-        if isinstance(v, str):
-            # Handle comma-separated string
-            if not v or v.isspace():
-                return ["http://localhost:3000", "http://localhost:8080"]
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
-        if isinstance(v, list):
-            return v
-        # Default if neither string nor list
-        return ["http://localhost:3000", "http://localhost:8080"]
+    @property
+    def allowed_origins(self) -> List[str]:
+        """Parse ALLOWED_ORIGINS as comma-separated string."""
+        if not self.ALLOWED_ORIGINS_STR or self.ALLOWED_ORIGINS_STR.isspace():
+            return ["http://localhost:3000", "http://localhost:8080"]
+        return [origin.strip() for origin in self.ALLOWED_ORIGINS_STR.split(",") if origin.strip()]
 
     # Database
     DATABASE_URL: str = Field(
