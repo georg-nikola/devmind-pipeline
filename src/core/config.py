@@ -40,7 +40,12 @@ class Settings(BaseSettings):
         """Parse ALLOWED_ORIGINS as comma-separated string."""
         if not self.ALLOWED_ORIGINS_STR or self.ALLOWED_ORIGINS_STR.isspace():
             return ["http://localhost:3000", "http://localhost:8080"]
-        return [origin.strip() for origin in self.ALLOWED_ORIGINS_STR.split(",") if origin.strip()]
+        origins = self.ALLOWED_ORIGINS_STR.split(",")
+        return [
+            origin.strip()
+            for origin in origins
+            if origin.strip()
+        ]
 
     # Database
     DATABASE_URL: str = Field(

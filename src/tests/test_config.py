@@ -7,7 +7,13 @@ import pytest
 from typing import List
 from unittest.mock import patch, MagicMock
 
-from core.config import Settings, MLModelConfig, KubernetesConfig, get_settings, get_ml_model_config
+from core.config import (
+    Settings,
+    MLModelConfig,
+    KubernetesConfig,
+    get_settings,
+    get_ml_model_config,
+)
 
 
 class TestSettingsBasics:
