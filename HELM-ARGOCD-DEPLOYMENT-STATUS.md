@@ -24,7 +24,7 @@
 - ✅ Production values overlay created
 - ✅ All files committed to local talos-configs Git repo
 
-**Location**: `~/repos/talos-configs/local-cluster-config/manifests/argocd/`
+**Location**: `/path/to/private-talos-configs/local-cluster-config/manifests/argocd/`
 
 ### 3. Automated Docker Builds
 - ✅ GitHub Actions workflow created (`.github/workflows/release.yml`)
@@ -175,7 +175,7 @@
 ### Monitor Progress
 ```bash
 # Watch Docker build status
-cd ~/repos/devmind-pipeline
+cd /path/to/devmind-pipeline
 gh run list --workflow="Build and Push Docker Image" --limit 1
 
 # Watch ArgoCD sync
@@ -229,7 +229,7 @@ curl http://localhost:8000/health
 
 ### To update application code:
 ```bash
-cd ~/repos/devmind-pipeline
+cd /path/to/devmind-pipeline
 # ... edit source files ...
 gh release create v1.1.1
 # Automated: build, push, deploy ✨
@@ -238,8 +238,8 @@ gh release create v1.1.1
 ### To update configuration:
 ```bash
 # Edit values in private repo
-vim ~/repos/talos-configs/local-cluster-config/manifests/argocd/values/devmind-pipeline-production.yaml
-kubectl apply -f ~/repos/talos-configs/local-cluster-config/manifests/argocd/application-devmind.yaml
+vim /path/to/private-talos-configs/local-cluster-config/manifests/argocd/values/devmind-pipeline-production.yaml
+kubectl apply -f /path/to/private-talos-configs/local-cluster-config/manifests/argocd/application-devmind.yaml
 # ArgoCD auto-syncs within 3 minutes
 ```
 

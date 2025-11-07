@@ -47,7 +47,7 @@ The `talos-configs` repository contains:
 - Production values overlays
 - Cloudflare integration configuration
 
-**Location**: `~/repos/talos-configs/local-cluster-config/manifests/argocd/`
+**Location**: `/path/to/private-talos-configs/local-cluster-config/manifests/argocd/`
 
 Files:
 - `application-devmind.yaml` - ArgoCD Application with Helm values
@@ -67,7 +67,7 @@ The public `devmind-pipeline` repository contains:
 Triggering a release automatically builds and pushes the Docker image:
 
 ```bash
-cd ~/repos/devmind-pipeline
+cd /path/to/devmind-pipeline
 
 # Create and push a new release
 gh release create v1.1.0 --title "Release v1.1.0" \
@@ -145,13 +145,13 @@ To update production configuration:
 
 ```bash
 # Edit values in the private repository
-vim ~/repos/talos-configs/local-cluster-config/manifests/argocd/values/devmind-pipeline-production.yaml
+vim /path/to/private-talos-configs/local-cluster-config/manifests/argocd/values/devmind-pipeline-production.yaml
 
 # Or edit the ArgoCD Application directly
-vim ~/repos/talos-configs/local-cluster-config/manifests/argocd/application-devmind.yaml
+vim /path/to/private-talos-configs/local-cluster-config/manifests/argocd/application-devmind.yaml
 
 # Apply the changes
-kubectl apply -f ~/repos/talos-configs/local-cluster-config/manifests/argocd/application-devmind.yaml
+kubectl apply -f /path/to/private-talos-configs/local-cluster-config/manifests/argocd/application-devmind.yaml
 
 # ArgoCD will re-sync with new values
 kubectl get application devmind-pipeline -n argocd -w
@@ -162,7 +162,7 @@ kubectl get application devmind-pipeline -n argocd -w
 To update the application:
 
 ```bash
-cd ~/repos/devmind-pipeline
+cd /path/to/devmind-pipeline
 
 # 1. Make code changes
 # ... edit files ...
