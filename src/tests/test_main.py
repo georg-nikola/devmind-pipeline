@@ -139,9 +139,7 @@ class TestModelsStatusEndpoint:
     def test_models_status_returns_json(self, client):
         """Test that /models/status returns JSON."""
         with patch("main.ml_service_manager") as mock_manager:
-            mock_manager.get_models_status = AsyncMock(
-                return_value={"models": []}
-            )
+            mock_manager.get_models_status = AsyncMock(return_value={"models": []})
             response = client.get("/models/status")
             assert response.headers["content-type"].startswith("application/json")
 

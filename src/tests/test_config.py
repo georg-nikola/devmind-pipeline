@@ -63,14 +63,18 @@ class TestAllowedOrigins:
 
     def test_allowed_origins_single_value(self):
         """Test parsing single ALLOWED_ORIGINS value."""
-        with patch.dict(os.environ, {"ALLOWED_ORIGINS": "https://example.com"}, clear=False):
+        with patch.dict(
+            os.environ, {"ALLOWED_ORIGINS": "https://example.com"}, clear=False
+        ):
             settings = Settings()
             origins = settings.allowed_origins
             assert origins == ["https://example.com"]
 
     def test_allowed_origins_comma_separated(self):
         """Test parsing comma-separated ALLOWED_ORIGINS."""
-        origins_str = "https://example.com,https://api.example.com,https://dashboard.example.com"
+        origins_str = (
+            "https://example.com,https://api.example.com,https://dashboard.example.com"
+        )
         with patch.dict(os.environ, {"ALLOWED_ORIGINS": origins_str}, clear=False):
             settings = Settings()
             origins = settings.allowed_origins
