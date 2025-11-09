@@ -10,12 +10,13 @@ from typing import AsyncGenerator
 
 import structlog
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from api.routers import build_optimizer, failure_predictor, test_intelligence
+from core.auth import get_api_key_auth
 from core.config import get_settings
 from core.logging import setup_logging
 from core.monitoring import setup_monitoring
@@ -74,6 +75,36 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # API key authentication middleware
+    # Protects /api/* endpoints, allows /health and /metrics for monitoring
+    api_key_auth = get_api_key_auth(settings.API_KEY)
+
+    @app.middleware("http")
+    async def api_key_middleware(request: Request, call_next):
+        """Middleware to validate API key for protected endpoints."""
+        # Public endpoints that don't require API key
+        public_paths = {"/", "/health", "/metrics"}
+
+        if request.url.path in public_paths:
+            return await call_next(request)
+
+        # Require API key for /api/* endpoints
+        if request.url.path.startswith("/api/"):
+            try:
+                await api_key_auth(request)
+            except HTTPException:
+                raise
+            return await call_next(request)
+
+        # Also protect model management endpoints
+        if request.url.path.startswith("/models/"):
+            try:
+                await api_key_auth(request)
+            except HTTPException:
+                raise
+
+        return await call_next(request)
 
     # Include API routers
     app.include_router(

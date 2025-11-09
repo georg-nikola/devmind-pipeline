@@ -120,6 +120,11 @@ spec:
               name: devmind-ml-secrets
               key: MLFLOW_TRACKING_URI
               optional: true
+        - name: DEVMIND_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: devmind-ml-secrets
+              key: DEVMIND_API_KEY
 
         # Resource limits
         resources:

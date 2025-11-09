@@ -30,6 +30,10 @@ class Settings(BaseSettings):
 
     # Security
     SECRET_KEY: str = Field(default="dev-secret-key", env="SECRET_KEY")
+    API_KEY: str = Field(
+        default="dev-api-key-insecure-change-in-production",
+        env="DEVMIND_API_KEY",
+    )
     ALLOWED_ORIGINS_STR: str = Field(
         default="http://localhost:3000,http://localhost:8080",
         env="ALLOWED_ORIGINS",
