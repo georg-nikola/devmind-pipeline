@@ -7,13 +7,14 @@ The DevMind Pipeline API is now protected with API key authentication. All API e
 ## Security Architecture
 
 ### Public Endpoints (No Authentication Required)
-These endpoints remain public for monitoring and health checks:
+These endpoints remain public for internal monitoring:
 - `GET /` - Service info
-- `GET /health` - Health status
+- `GET /internal-health` - Internal health status (for Kubernetes probes)
 - `GET /metrics` - Prometheus metrics
 
 ### Protected Endpoints (API Key Required)
 All endpoints requiring authentication must include the `X-API-Key` header:
+- `GET /health` - Health status (external dashboards)
 - `POST /api/v1/test-intelligence/select` - Test selection
 - `POST /api/v1/failure-predictor/predict` - Failure prediction
 - `POST /api/v1/build-optimizer/*` - Build optimization
@@ -45,11 +46,21 @@ All endpoints requiring authentication must include the `X-API-Key` header:
 
 ### Without API Key (Public Endpoints)
 ```bash
-curl https://devmind.georg-nikola.com/health
+# Internal health check (for K8s)
+curl https://devmind.georg-nikola.com/internal-health
+
+# Service info and metrics
+curl https://devmind.georg-nikola.com/
+curl https://devmind.georg-nikola.com/metrics
 ```
 
 ### With API Key (Protected Endpoints)
 ```bash
+# Health status (external dashboards)
+curl -H "X-API-Key: WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw" \
+  https://devmind.georg-nikola.com/health
+
+# Test selection
 curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
   -H "X-API-Key: WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw" \
   -H "Content-Type: application/json" \
@@ -130,7 +141,23 @@ To rotate the API key:
 
 ## Testing
 
-### Test Without Authentication (Should Fail)
+### Test Health Endpoint Authentication
+```bash
+# Without API key (should fail)
+curl -i https://devmind.georg-nikola.com/health
+
+# Expected: HTTP 401 Unauthorized
+# Response: {"detail":"Missing X-API-Key header"}
+
+# With API key (should succeed)
+curl -H "X-API-Key: WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw" \
+  https://devmind.georg-nikola.com/health
+
+# Expected: HTTP 200 OK
+# Response: {"healthy":true,"models_loaded":3,...}
+```
+
+### Test API Endpoint Without Authentication (Should Fail)
 ```bash
 curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
   -H "Content-Type: application/json" \
@@ -151,7 +178,7 @@ curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
 # Response: {"detail":"Invalid API key"}
 ```
 
-### Test With Valid Key (Should Proceed)
+### Test API Endpoint With Valid Key (Should Proceed)
 ```bash
 curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
   -H "X-API-Key: WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw" \
@@ -164,6 +191,15 @@ curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
   }'
 
 # Expected: HTTP 200 or 422 (validation error, but auth passed)
+```
+
+### Test Internal Health Endpoint (Kubernetes)
+```bash
+# Internal health endpoint is public (no API key needed)
+curl https://devmind.georg-nikola.com/internal-health
+
+# Expected: HTTP 200 OK
+# Response: {"healthy":true,"models_loaded":3,...}
 ```
 
 ## Security Best Practices

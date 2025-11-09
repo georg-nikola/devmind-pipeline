@@ -84,9 +84,17 @@ def create_app() -> FastAPI:
     async def api_key_middleware(request: Request, call_next):
         """Middleware to validate API key for protected endpoints."""
         # Public endpoints that don't require API key
-        public_paths = {"/", "/health", "/metrics"}
+        public_paths = {"/", "/internal-health", "/metrics"}
 
         if request.url.path in public_paths:
+            return await call_next(request)
+
+        # Require API key for /health endpoint (external dashboards)
+        if request.url.path == "/health":
+            try:
+                await api_key_auth(request)
+            except HTTPException:
+                raise
             return await call_next(request)
 
         # Require API key for /api/* endpoints
@@ -144,9 +152,31 @@ async def root():
     }
 
 
+@app.get("/internal-health")
+async def internal_health_check():
+    """
+    Internal health check endpoint for Kubernetes probes.
+    Unprotected to allow K8s to check service health.
+    """
+    global ml_service_manager
+
+    if not ml_service_manager:
+        raise HTTPException(status_code=503, detail="ML services not initialized")
+
+    health_status = await ml_service_manager.health_check()
+
+    if not health_status["healthy"]:
+        raise HTTPException(status_code=503, detail=health_status)
+
+    return health_status
+
+
 @app.get("/health")
 async def health_check():
-    """Health check endpoint."""
+    """
+    External health check endpoint (API key required).
+    Use for external monitoring and dashboards.
+    """
     global ml_service_manager
 
     if not ml_service_manager:

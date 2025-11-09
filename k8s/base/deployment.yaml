@@ -135,10 +135,10 @@ spec:
             memory: "2Gi"
             cpu: "1000m"
 
-        # Probes
+        # Probes (use internal-health which doesn't require API key)
         startupProbe:
           httpGet:
-            path: /health
+            path: /internal-health
             port: 8000
           initialDelaySeconds: 10
           periodSeconds: 5
@@ -146,14 +146,14 @@ spec:
           failureThreshold: 30
         livenessProbe:
           httpGet:
-            path: /health
+            path: /internal-health
             port: 8000
           periodSeconds: 10
           timeoutSeconds: 3
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /health
+            path: /internal-health
             port: 8000
           periodSeconds: 5
           timeoutSeconds: 3
