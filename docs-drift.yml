@@ -1,0 +1,24 @@
+# docs-drift configuration
+# https://github.com/georg-nikola/docs-drift
+
+version: 1
+
+docs:
+  # Glob patterns for markdown files to check
+  paths:
+    - README.md
+    - CLAUDE.md
+    - "*.md"
+    - docs/**/*.md
+
+checks:
+  code_blocks:
+    enabled: true
+    # DevMind Pipeline uses Python (ML), Go (pipeline), and JavaScript (React dashboard)
+    # Also includes many bash commands for deployment and operations
+    languages:
+      - python
+      - javascript
+      - bash
+    # Maximum time allowed for each code block to execute
+    timeout: 30s
