@@ -3,6 +3,7 @@
 > **AI-augmented DevOps pipeline with intelligent optimization**
 
 [![CI/CD](https://github.com/georg-nikola/devmind-pipeline/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/georg-nikola/devmind-pipeline/actions)
+[![Documentation](https://github.com/georg-nikola/devmind-pipeline/workflows/Documentation%20Check/badge.svg)](https://github.com/georg-nikola/devmind-pipeline/actions/workflows/docs-drift.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/release/python-3110/)
 [![Kubernetes](https://img.shields.io/badge/kubernetes-ready-326ce5.svg)](https://kubernetes.io/)
