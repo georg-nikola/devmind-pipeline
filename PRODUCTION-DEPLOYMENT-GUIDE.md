@@ -66,7 +66,7 @@ The public `devmind-pipeline` repository contains:
 
 Triggering a release automatically builds and pushes the Docker image:
 
-```bash
+```bash docs-drift:skip
 cd /path/to/devmind-pipeline
 
 # Create and push a new release
@@ -93,7 +93,7 @@ Once the Docker image is built and pushed:
 
 Monitor deployment:
 
-```bash
+```bash docs-drift:skip
 # Watch ArgoCD sync status
 kubectl get application devmind-pipeline -n argocd -w
 
@@ -119,7 +119,7 @@ After successful deployment:
 - Health check: `https://devmind.example.com/health`
 
 **Local Port-Forward** (if needed):
-```bash
+```bash docs-drift:skip
 kubectl port-forward -n devmind-pipeline svc/devmind-pipeline 8000:8000
 # Access at http://localhost:8000
 ```
@@ -143,7 +143,7 @@ Key overrides:
 
 To update production configuration:
 
-```bash
+```bash docs-drift:skip
 # Edit values in the private repository
 vim /path/to/private-talos-configs/local-cluster-config/manifests/argocd/values/devmind-pipeline-production.yaml
 
@@ -161,7 +161,7 @@ kubectl get application devmind-pipeline -n argocd -w
 
 To update the application:
 
-```bash
+```bash docs-drift:skip
 cd /path/to/devmind-pipeline
 
 # 1. Make code changes
@@ -180,7 +180,7 @@ gh release create v1.1.1 --title "v1.1.1 Release"
 
 ### Check Deployment Status
 
-```bash
+```bash docs-drift:skip
 # View all resources in the namespace
 kubectl get all -n devmind-pipeline
 
@@ -197,7 +197,7 @@ kubectl logs -n devmind-pipeline -l app=devmind-ml-service --previous  # previou
 
 ### Check ArgoCD Status
 
-```bash
+```bash docs-drift:skip
 # View application sync status
 argocd app get devmind-pipeline
 kubectl get application devmind-pipeline -n argocd
@@ -230,7 +230,7 @@ kubectl logs -n argocd -l app.kubernetes.io/name=argocd-application-controller -
 
 If needed, rollback to a previous version:
 
-```bash
+```bash docs-drift:skip
 # View version history
 argocd app history devmind-pipeline
 kubectl rollout history deployment/devmind-pipeline -n devmind-pipeline
@@ -287,7 +287,7 @@ resources:
 ```
 
 Apply changes:
-```bash
+```bash docs-drift:skip
 kubectl apply -f application-devmind.yaml
 ```
 

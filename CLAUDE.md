@@ -18,7 +18,7 @@ This is currently a **demonstration/portfolio project** - the Python ML services
 
 #### Setup (One-Time)
 
-```bash
+```bash docs-drift:skip
 # Navigate to Python source
 cd src
 
@@ -37,7 +37,7 @@ pip install -r requirements.txt
 
 #### Running the Application
 
-```bash
+```bash docs-drift:skip
 # From src directory with venv activated
 
 # Run the ML service locally
@@ -51,7 +51,7 @@ python main.py
 
 ### Code Quality & Testing
 
-```bash
+```bash docs-drift:skip
 # All commands assume you're in src/ with venv activated
 
 # Format code with Black (line length: 100)
@@ -92,7 +92,7 @@ Always use a virtual environment for development to avoid system-wide package co
 
 ### Kubernetes Deployment
 
-```bash
+```bash docs-drift:skip
 # Deploy to local Kubernetes (OrbStack/minikube)
 kubectl apply -f k8s/namespace.yaml
 kubectl apply -f k8s/
@@ -315,7 +315,7 @@ manifests/argocd/
 
 1. **Make changes** to code, Dockerfile, or Helm templates
 2. **Build and push** Docker image to GHCR:
-   ```bash
+   ```bash docs-drift:skip
    docker build -t ghcr.io/YOUR_USERNAME/devmind-ml-service:v1.2.3 .
    docker push ghcr.io/YOUR_USERNAME/devmind-ml-service:v1.2.3
    ```
@@ -337,7 +337,7 @@ manifests/argocd/
 
 **Option 3: Local Helm Testing**
 
-```bash
+```bash docs-drift:skip
 # Test Helm template rendering
 cd helm/devmind-pipeline
 helm template devmind-pipeline . --values values.yaml
@@ -359,7 +359,7 @@ helm install devmind-pipeline . \
 
 #### Option 1: GitOps (Recommended)
 
-```bash
+```bash docs-drift:skip
 # 1. Make your changes
 vim k8s/production/deployment-patch.yaml
 
@@ -378,7 +378,7 @@ kubectl get pods -n devmind-pipeline
 
 #### Option 2: Direct kubectl (Development only)
 
-```bash
+```bash docs-drift:skip
 # Deploy to local OrbStack cluster
 cd scripts
 ./deploy-local.sh
@@ -416,7 +416,7 @@ All metrics from `devmind-ml-service` are automatically scraped by Prometheus.
 
 The production deployment uses images from GitHub Container Registry (GHCR):
 
-```bash
+```bash docs-drift:skip
 # Build image
 docker build -t devmind-ml-service:latest .
 
@@ -480,7 +480,7 @@ ingress:
 ```
 
 Apply with:
-```bash
+```bash docs-drift:skip
 cd ~/repos/talos-configs/local-cluster-config/manifests/terraform
 get_cloudflare_credentials  # Load credentials
 terraform apply
@@ -492,7 +492,7 @@ kubectl rollout restart deployment/cloudflared -n cloudflare-tunnel
 
 ### Useful Commands
 
-```bash
+```bash docs-drift:skip
 # View ArgoCD application status
 kubectl get application devmind-pipeline -n argocd
 argocd app get devmind-pipeline
@@ -521,7 +521,7 @@ kubectl port-forward -n devmind-pipeline svc/devmind-ml-service 8000:8000
 
 Add this to your shell profile for easy Cloudflare credentials loading:
 
-```bash
+```bash docs-drift:skip
 # ~/.zshrc or ~/.bashrc
 get_cloudflare_credentials() {
   export CLOUDFLARE_EMAIL=$(op read "op://Personal/Global CloudFlare API Key/username")

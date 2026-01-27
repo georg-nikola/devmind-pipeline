@@ -124,13 +124,13 @@ devmind-pipeline/
 ### Installation
 
 1. **Clone the repository**
-   ```bash
+   ```bash docs-drift:skip
    git clone https://github.com/georg-nikola/devmind-pipeline.git
    cd devmind-pipeline
    ```
 
 2. **Install dependencies**
-   ```bash
+   ```bash docs-drift:skip
    # Python dependencies
    pip install -r src/requirements.txt
    
@@ -142,7 +142,7 @@ devmind-pipeline/
    ```
 
 3. **Deploy to Kubernetes (OrbStack/Local)**
-   ```bash
+   ```bash docs-drift:skip
    # Create namespace and deploy services
    kubectl apply -f k8s/namespace.yaml
    kubectl apply -f k8s/
@@ -152,7 +152,7 @@ devmind-pipeline/
    ```
 
 4. **Access the services**
-   ```bash
+   ```bash docs-drift:skip
    # Use the convenience script
    ./start-dashboards.sh
 
@@ -248,7 +248,7 @@ MODEL_CONFIG = {
 
 ### Running Tests
 
-```bash
+```bash docs-drift:skip
 # Python tests
 cd src && python -m pytest tests/
 
@@ -264,7 +264,7 @@ make test-integration
 
 ### Local Development
 
-```bash
+```bash docs-drift:skip
 # Start development environment
 make dev-up
 

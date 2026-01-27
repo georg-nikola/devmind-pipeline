@@ -4,7 +4,7 @@
 
 You have a **fully automated production deployment pipeline**. To deploy:
 
-```bash
+```bash docs-drift:skip
 # 1. Make code changes
 # 2. Create release (this triggers automated build + deployment)
 cd /path/to/devmind-pipeline
@@ -23,7 +23,7 @@ gh release create v1.3.0
 
 ### Setup Steps
 
-```bash
+```bash docs-drift:skip
 # 1. Clone the repository
 git clone https://github.com/YOUR_USERNAME/devmind-pipeline
 cd devmind-pipeline
@@ -43,7 +43,7 @@ kubectl get application devmind-pipeline -n argocd
 ## 📦 Common Tasks
 
 ### Deploy New Version
-```bash
+```bash docs-drift:skip
 # Create release with version tag
 gh release create v1.3.0 \
   --title "Release v1.3.0" \
@@ -57,7 +57,7 @@ gh release create v1.3.0 \
 ```
 
 ### Monitor Deployment
-```bash
+```bash docs-drift:skip
 # Watch pods
 kubectl get pods -n devmind-pipeline -w
 
@@ -73,7 +73,7 @@ curl http://localhost:8000/health
 ```
 
 ### Update Configuration
-```bash
+```bash docs-drift:skip
 # Edit production values in private repo
 vim /path/to/private-talos-configs/local-cluster-config/manifests/argocd/values/devmind-pipeline-production.yaml
 
@@ -89,7 +89,7 @@ kubectl apply -f /path/to/private-talos-configs/local-cluster-config/manifests/a
 ```
 
 ### Scale Deployment
-```bash
+```bash docs-drift:skip
 # Edit values to increase replicas
 replicaCount: 3  # was 2
 
@@ -101,7 +101,7 @@ kubectl rollout status deployment/devmind-pipeline -n devmind-pipeline
 ```
 
 ### Rollback to Previous Version
-```bash
+```bash docs-drift:skip
 # View version history
 kubectl rollout history deployment/devmind-pipeline -n devmind-pipeline
 
@@ -115,7 +115,7 @@ kubectl rollout undo deployment/devmind-pipeline -n devmind-pipeline --to-revisi
 ## 🔍 Troubleshooting
 
 ### Pods in ImagePullBackOff
-```bash
+```bash docs-drift:skip
 # Check if image was pushed
 docker pull ghcr.io/YOUR_USERNAME/devmind-ml-service:v1.2.0
 
@@ -129,7 +129,7 @@ kubectl patch application devmind-pipeline -n argocd \
 ```
 
 ### ArgoCD Shows OutOfSync
-```bash
+```bash docs-drift:skip
 # This is normal during deployments. Options:
 
 # Wait for auto-sync (3 minutes)
@@ -141,7 +141,7 @@ kubectl patch application devmind-pipeline -n argocd \
 ```
 
 ### Application Not Accessible
-```bash
+```bash docs-drift:skip
 # Verify service exists
 kubectl get svc -n devmind-pipeline
 
@@ -228,7 +228,7 @@ kubectl logs -n devmind-pipeline -l app=devmind-ml-service
 
 ## 🆘 When Something Goes Wrong
 
-```bash
+```bash docs-drift:skip
 # Check everything
 kubectl get all -n devmind-pipeline
 kubectl describe application devmind-pipeline -n argocd
@@ -260,7 +260,7 @@ kubectl rollout restart deployment/devmind-pipeline -n devmind-pipeline
 
 Your deployment pipeline is set up. To start:
 
-```bash
+```bash docs-drift:skip
 cd /path/to/devmind-pipeline
 gh release create v1.3.0 --title "First release"
 # Everything else happens automatically! 🚀

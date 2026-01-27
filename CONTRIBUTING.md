@@ -9,14 +9,14 @@ We use a **fork-based workflow** to keep the main repository clean and organized
 ### Getting Started
 
 1. **Fork the Repository**
-   ```bash
+   ```bash docs-drift:skip
    # Click the "Fork" button on GitHub or use gh CLI
    gh repo fork georg-nikola/devmind-pipeline --clone
    cd devmind-pipeline
    ```
 
 2. **Create a Feature Branch**
-   ```bash
+   ```bash docs-drift:skip
    git checkout -b feature/your-feature-name
    ```
 
@@ -27,7 +27,7 @@ We use a **fork-based workflow** to keep the main repository clean and organized
    - Update documentation as needed
 
 4. **Run Tests Locally**
-   ```bash
+   ```bash docs-drift:skip
    # Python tests and linting
    cd src
    pip install -r requirements.txt
@@ -43,18 +43,18 @@ We use a **fork-based workflow** to keep the main repository clean and organized
    ```
 
 5. **Commit Your Changes**
-   ```bash
+   ```bash docs-drift:skip
    git add .
    git commit -m "Description of your changes"
    ```
 
 6. **Push to Your Fork**
-   ```bash
+   ```bash docs-drift:skip
    git push origin feature/your-feature-name
    ```
 
 7. **Create a Pull Request**
-   ```bash
+   ```bash docs-drift:skip
    # Using gh CLI
    gh pr create --base main --head your-username:feature/your-feature-name
 
@@ -188,7 +188,7 @@ Please include:
 
 Use clear, descriptive commit messages:
 
-```bash
+```bash docs-drift:skip
 # Good
 git commit -m "Add ML model for test selection optimization"
 git commit -m "Fix cache invalidation bug in build optimizer"

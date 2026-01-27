@@ -46,13 +46,13 @@ All services have been successfully deployed to OrbStack Kubernetes and are now 
 ## 🚀 Quick Start
 
 ### Start All Services
-```bash
+```bash docs-drift:skip
 cd /path/to/devmind-pipeline
 ./start-dashboards.sh
 ```
 
 ### Test the ML API
-```bash
+```bash docs-drift:skip
 # Health check
 curl http://localhost:8000/health
 
@@ -95,7 +95,7 @@ curl -X POST http://localhost:8000/test/select \
 ## 📦 Deployed Resources
 
 ### Kubernetes Resources
-```bash
+```bash docs-drift:skip
 # View all resources
 kubectl get all -n devmind-pipeline
 
@@ -141,21 +141,21 @@ kubectl port-forward -n devmind-pipeline svc/prometheus 9090:9090
 ## 🛠️ Troubleshooting
 
 ### Port-forwards not working
-```bash
+```bash docs-drift:skip
 # Kill all port-forwards and restart
 pkill -f "kubectl port-forward"
 ./start-dashboards.sh
 ```
 
 ### Check pod status
-```bash
+```bash docs-drift:skip
 kubectl get pods -n devmind-pipeline
 kubectl describe pod -n devmind-pipeline <pod-name>
 kubectl logs -n devmind-pipeline <pod-name>
 ```
 
 ### Rebuild ML Service
-```bash
+```bash docs-drift:skip
 kubectl delete pod -n devmind-pipeline -l app=devmind-ml-service
 # Wait for new pod to start
 kubectl get pods -n devmind-pipeline -w

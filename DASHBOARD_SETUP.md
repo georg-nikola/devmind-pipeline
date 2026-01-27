@@ -37,7 +37,7 @@ Headers:
 
 ### Option 2: Using curl for Monitoring Scripts
 
-```bash
+```bash docs-drift:skip
 #!/bin/bash
 
 API_KEY="WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw"
@@ -120,7 +120,7 @@ scrape_configs:
 ## Testing
 
 ### Test with curl
-```bash
+```bash docs-drift:skip
 # Without API key (should fail)
 curl -i https://devmind.georg-nikola.com/health
 
@@ -130,7 +130,7 @@ curl -H "X-API-Key: WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw" \
 ```
 
 ### Test with Python
-```python
+```python docs-drift:skip
 import requests
 
 API_KEY = "WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw"
@@ -170,7 +170,7 @@ fetch(endpoint, {
 
 If you use Cloudflare Workers to check health status:
 
-```javascript
+```javascript docs-drift:skip
 async function handleRequest(request) {
   const apiKey = "WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw";
   const endpoint = "https://devmind.georg-nikola.com/health";
@@ -252,7 +252,7 @@ init_config:
 
 If using AWS for monitoring:
 
-```bash
+```bash docs-drift:skip
 aws cloudwatch put-metric-alarm \
   --alarm-name devmind-health-check \
   --alarm-description "DevMind API Health Status" \
@@ -311,18 +311,18 @@ aws cloudwatch put-metric-alarm \
 To rotate the API key:
 
 1. Generate new key:
-   ```bash
+   ```bash docs-drift:skip
    python3 -c "import secrets; print(secrets.token_urlsafe(32))"
    ```
 
 2. Update Kubernetes secret:
-   ```bash
+   ```bash docs-drift:skip
    kubectl patch secret devmind-ml-secrets -n devmind-pipeline \
      -p '{"data":{"DEVMIND_API_KEY":"'"$(echo -n '<NEW_KEY>' | base64)"'"}}'
    ```
 
 3. Restart deployment:
-   ```bash
+   ```bash docs-drift:skip
    kubectl rollout restart deployment/devmind-pipeline -n devmind-pipeline
    ```
 

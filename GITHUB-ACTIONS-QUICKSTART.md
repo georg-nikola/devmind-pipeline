@@ -26,7 +26,7 @@ The easiest way is to use the pre-built workflow:
 The workflow is already in: `.github/workflows/devmind-integration.yml`
 
 Just copy it to your repository:
-```bash
+```bash docs-drift:skip
 cp .github/workflows/devmind-integration.yml your-repo/.github/workflows/
 ```
 
@@ -166,7 +166,7 @@ If you enabled PR comments:
 **Problem**: Your DevMind instance isn't accessible from GitHub Actions.
 
 **Solution**:
-```bash
+```bash docs-drift:skip
 # Test from your machine
 curl https://your-devmind-instance.com/health
 

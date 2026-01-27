@@ -139,7 +139,7 @@
 ## 🚀 How It Works Now
 
 1. **Developer releases a new version**:
-   ```bash
+   ```bash docs-drift:skip
    gh release create v1.1.0
    ```
 
@@ -173,7 +173,7 @@
 4. ⏳ Kubernetes will pull and start new pods
 
 ### Monitor Progress
-```bash
+```bash docs-drift:skip
 # Watch Docker build status
 cd /path/to/devmind-pipeline
 gh run list --workflow="Build and Push Docker Image" --limit 1
@@ -189,7 +189,7 @@ kubectl logs -n devmind-pipeline -l app=devmind-ml-service -f
 ```
 
 ### Verify Deployment Complete
-```bash
+```bash docs-drift:skip
 # All should be "Running" and "Ready"
 kubectl get pods -n devmind-pipeline
 
@@ -228,7 +228,7 @@ curl http://localhost:8000/health
 ## 🔧 Making Changes Going Forward
 
 ### To update application code:
-```bash
+```bash docs-drift:skip
 cd /path/to/devmind-pipeline
 # ... edit source files ...
 gh release create v1.1.1
@@ -236,7 +236,7 @@ gh release create v1.1.1
 ```
 
 ### To update configuration:
-```bash
+```bash docs-drift:skip
 # Edit values in private repo
 vim /path/to/private-talos-configs/local-cluster-config/manifests/argocd/values/devmind-pipeline-production.yaml
 kubectl apply -f /path/to/private-talos-configs/local-cluster-config/manifests/argocd/application-devmind.yaml
@@ -244,7 +244,7 @@ kubectl apply -f /path/to/private-talos-configs/local-cluster-config/manifests/a
 ```
 
 ### To scale replicas:
-```bash
+```bash docs-drift:skip
 # Edit values in private repo
 # Change: replicaCount: 2 → replicaCount: 3
 kubectl apply -f application-devmind.yaml

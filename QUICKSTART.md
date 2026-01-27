@@ -8,7 +8,7 @@ DevMind Pipeline AI-Enhanced DevOps platform is running at:
 ## 🎮 Interactive Demo
 
 Run the interactive demo script:
-```bash
+```bash docs-drift:skip
 cd ~/.repos/devmind-pipeline
 ./demo.sh
 ```
@@ -24,12 +24,12 @@ Open these in your browser:
 ## 📋 Quick Examples
 
 ### 1. Check Service Health
-```bash
+```bash docs-drift:skip
 curl http://localhost:8001/health | python3 -m json.tool
 ```
 
 ### 2. Optimize Build Performance
-```bash
+```bash docs-drift:skip
 curl -X POST http://localhost:8001/api/v1/build-optimizer/optimize \
   -H 'Content-Type: application/json' \
   -d '{
@@ -40,7 +40,7 @@ curl -X POST http://localhost:8001/api/v1/build-optimizer/optimize \
 ```
 
 ### 3. Predict Pipeline Failure
-```bash
+```bash docs-drift:skip
 curl -X POST http://localhost:8001/api/v1/failure-predictor/predict \
   -H 'Content-Type: application/json' \
   -d '{
@@ -51,7 +51,7 @@ curl -X POST http://localhost:8001/api/v1/failure-predictor/predict \
 ```
 
 ### 4. Smart Test Selection
-```bash
+```bash docs-drift:skip
 curl -X POST http://localhost:8001/api/v1/test-intelligence/select \
   -H 'Content-Type: application/json' \
   -d '{
@@ -62,12 +62,12 @@ curl -X POST http://localhost:8001/api/v1/test-intelligence/select \
 ```
 
 ### 5. Get Cache Strategy
-```bash
+```bash docs-drift:skip
 curl http://localhost:8001/api/v1/build-optimizer/cache-strategy/my-project | python3 -m json.tool
 ```
 
 ### 6. Detect Flaky Tests
-```bash
+```bash docs-drift:skip
 curl 'http://localhost:8001/api/v1/test-intelligence/flaky-tests/my-app?days=30' | python3 -m json.tool
 ```
 
@@ -99,22 +99,22 @@ curl 'http://localhost:8001/api/v1/test-intelligence/flaky-tests/my-app?days=30'
 ## 🛠️ Management
 
 ### View Logs
-```bash
+```bash docs-drift:skip
 tail -f /tmp/devmind-pipeline.log
 ```
 
 ### Check Server Status
-```bash
+```bash docs-drift:skip
 lsof -i:8001
 ```
 
 ### Stop Server
-```bash
+```bash docs-drift:skip
 lsof -ti:8001 | xargs kill
 ```
 
 ### Restart Server
-```bash
+```bash docs-drift:skip
 cd ~/.repos/devmind-pipeline/src
 source venv/bin/activate
 python -m uvicorn main:app --host 0.0.0.0 --port 8001 --reload

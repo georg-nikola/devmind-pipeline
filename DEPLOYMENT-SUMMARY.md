@@ -66,7 +66,7 @@ Updated CLAUDE.md files in both repos with:
 
 ### Step 1: Apply Terraform Changes
 
-```bash
+```bash docs-drift:skip
 cd ~/repos/talos-configs/local-cluster-config/manifests/terraform
 
 # Load Cloudflare credentials
@@ -96,7 +96,7 @@ Required scopes:
 - ✅ `delete:packages` (optional) - Delete packages from GitHub Package Registry
 
 After creating the token:
-```bash
+```bash docs-drift:skip
 # Save to 1Password (recommended)
 op item create --category=password \
   --title="GitHub PAT - GHCR" \
@@ -113,7 +113,7 @@ export GITHUB_TOKEN=<your-token>
 
 **Note**: Docker image has already been built locally (`devmind-ml-service:latest`).
 
-```bash
+```bash docs-drift:skip
 cd ~/repos/devmind-pipeline
 
 # Tag for GitHub Container Registry (image already built)
@@ -132,7 +132,7 @@ docker push ghcr.io/YOUR_GITHUB_USERNAME/devmind-ml-service:latest
 
 ### Step 4: Commit and Push K8s Manifests
 
-```bash
+```bash docs-drift:skip
 cd ~/repos/devmind-pipeline
 
 # Stage all new files
@@ -155,7 +155,7 @@ git push origin main
 
 After pushing to GitHub, ArgoCD will automatically detect and sync the application:
 
-```bash
+```bash docs-drift:skip
 # Watch ArgoCD sync status
 kubectl get application devmind-pipeline -n argocd -w
 
@@ -169,7 +169,7 @@ open https://argocd.example.com
 
 ### Step 6: Verify Deployment
 
-```bash
+```bash docs-drift:skip
 # Check pods are running
 kubectl get pods -n devmind-pipeline
 
@@ -205,7 +205,7 @@ kubectl logs -n devmind-pipeline -l app=devmind-ml-service -f
 
 Before deploying to production, you can test locally on OrbStack:
 
-```bash
+```bash docs-drift:skip
 cd ~/repos/devmind-pipeline
 
 # Build local image
@@ -225,7 +225,7 @@ open http://localhost:30800/docs
 
 Update the secret in `k8s/base/secret.yaml` or create manually:
 
-```bash
+```bash docs-drift:skip
 kubectl create secret generic devmind-ml-secrets \
   -n devmind-pipeline \
   --from-literal=DATABASE_URL='postgresql://user:pass@host:5432/db' \

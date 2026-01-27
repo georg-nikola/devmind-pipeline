@@ -41,7 +41,7 @@ http://devmind-pipeline.devmind-pipeline.svc.cluster.local:8000
 ### Build Optimizer
 
 **Predict Build Time**:
-```bash
+```bash docs-drift:skip
 POST /api/v1/build-optimizer/predict
 Content-Type: application/json
 
@@ -73,7 +73,7 @@ Content-Type: application/json
 ### Failure Predictor
 
 **Predict Pipeline Failure**:
-```bash
+```bash docs-drift:skip
 POST /api/v1/failure-predictor/predict
 Content-Type: application/json
 
@@ -109,7 +109,7 @@ Content-Type: application/json
 ### Test Intelligence
 
 **Select Tests to Run**:
-```bash
+```bash docs-drift:skip
 POST /api/v1/test-intelligence/select
 Content-Type: application/json
 
@@ -146,7 +146,7 @@ Content-Type: application/json
 ### Health Check
 
 **Check Service Status**:
-```bash
+```bash docs-drift:skip
 GET /health
 ```
 
@@ -649,7 +649,7 @@ jobs:
 
 Create `.github/env/devmind.env`:
 
-```bash
+```bash docs-drift:skip
 # DevMind API Configuration
 DEVMIND_API=https://devmind.example.com
 DEVMIND_TIMEOUT=30

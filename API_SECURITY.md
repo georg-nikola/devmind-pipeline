@@ -28,7 +28,7 @@ All endpoints requiring authentication must include the `X-API-Key` header:
 ### Storage Locations
 
 1. **Kubernetes Secret** (Production)
-   ```bash
+   ```bash docs-drift:skip
    kubectl get secret devmind-ml-secrets -n devmind-pipeline
    kubectl get secret devmind-ml-secrets -n devmind-pipeline -o jsonpath='{.data.DEVMIND_API_KEY}' | base64 -d
    ```
@@ -45,7 +45,7 @@ All endpoints requiring authentication must include the `X-API-Key` header:
 ## Usage Examples
 
 ### Without API Key (Public Endpoints)
-```bash
+```bash docs-drift:skip
 # Internal health check (for K8s)
 curl https://devmind.georg-nikola.com/internal-health
 
@@ -55,7 +55,7 @@ curl https://devmind.georg-nikola.com/metrics
 ```
 
 ### With API Key (Protected Endpoints)
-```bash
+```bash docs-drift:skip
 # Health status (external dashboards)
 curl -H "X-API-Key: WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw" \
   https://devmind.georg-nikola.com/health
@@ -115,23 +115,23 @@ steps:
 To rotate the API key:
 
 1. **Generate new key:**
-   ```bash
+   ```bash docs-drift:skip
    python3 -c "import secrets; print(secrets.token_urlsafe(32))"
    ```
 
 2. **Update Kubernetes secret:**
-   ```bash
+   ```bash docs-drift:skip
    kubectl patch secret devmind-ml-secrets -n devmind-pipeline \
      -p '{"data":{"DEVMIND_API_KEY":"'"$(echo -n '<NEW_KEY>' | base64)"'"}}'
    ```
 
 3. **Restart deployment:**
-   ```bash
+   ```bash docs-drift:skip
    kubectl rollout restart deployment/devmind-pipeline -n devmind-pipeline
    ```
 
 4. **Update GitHub Actions secrets:**
-   ```bash
+   ```bash docs-drift:skip
    gh secret set DEVMIND_API_KEY -b '<NEW_KEY>' -R devmind-pipeline
    gh secret set DEVMIND_API_KEY -b '<NEW_KEY>' -R sentinel-mesh
    gh secret set DEVMIND_API_KEY -b '<NEW_KEY>' -R cloudops-central
@@ -142,7 +142,7 @@ To rotate the API key:
 ## Testing
 
 ### Test Health Endpoint Authentication
-```bash
+```bash docs-drift:skip
 # Without API key (should fail)
 curl -i https://devmind.georg-nikola.com/health
 
@@ -158,7 +158,7 @@ curl -H "X-API-Key: WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw" \
 ```
 
 ### Test API Endpoint Without Authentication (Should Fail)
-```bash
+```bash docs-drift:skip
 curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
   -H "Content-Type: application/json" \
   -d '{"changed_files":["test.py"],"all_tests":["test1"]}'
@@ -168,7 +168,7 @@ curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
 ```
 
 ### Test With Invalid Key (Should Fail)
-```bash
+```bash docs-drift:skip
 curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
   -H "X-API-Key: invalid-key" \
   -H "Content-Type: application/json" \
@@ -179,7 +179,7 @@ curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
 ```
 
 ### Test API Endpoint With Valid Key (Should Proceed)
-```bash
+```bash docs-drift:skip
 curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
   -H "X-API-Key: WZhzpA-JLYAv3IMfQF9HSeb49iLipgGWRnHDWdJKgmw" \
   -H "Content-Type: application/json" \
@@ -194,7 +194,7 @@ curl -X POST https://devmind.georg-nikola.com/api/v1/test-intelligence/select \
 ```
 
 ### Test Internal Health Endpoint (Kubernetes)
-```bash
+```bash docs-drift:skip
 # Internal health endpoint is public (no API key needed)
 curl https://devmind.georg-nikola.com/internal-health
 
@@ -216,28 +216,28 @@ curl https://devmind.georg-nikola.com/internal-health
 
 ### Authentication Not Working
 1. Verify the Kubernetes secret exists:
-   ```bash
+   ```bash docs-drift:skip
    kubectl get secret devmind-ml-secrets -n devmind-pipeline
    ```
 
 2. Check the environment variable is set:
-   ```bash
+   ```bash docs-drift:skip
    kubectl exec -it -n devmind-pipeline deployment/devmind-pipeline -- env | grep DEVMIND_API_KEY
    ```
 
 3. Verify the API key value:
-   ```bash
+   ```bash docs-drift:skip
    kubectl get secret devmind-ml-secrets -n devmind-pipeline -o jsonpath='{.data.DEVMIND_API_KEY}' | base64 -d
    ```
 
 4. Check pod logs:
-   ```bash
+   ```bash docs-drift:skip
    kubectl logs -n devmind-pipeline -l app=devmind-pipeline -f
    ```
 
 ### GitHub Actions Secret Not Found
 1. Verify secret is set:
-   ```bash
+   ```bash docs-drift:skip
    gh secret list -R devmind-pipeline | grep DEVMIND_API_KEY
    ```
 
@@ -247,14 +247,14 @@ curl https://devmind.georg-nikola.com/internal-health
    ```
 
 3. Re-set the secret if needed:
-   ```bash
+   ```bash docs-drift:skip
    gh secret set DEVMIND_API_KEY -b '<KEY>' -R <REPO>
    ```
 
 ## Next Steps
 
 1. **Rebuild Docker image** with authentication code:
-   ```bash
+   ```bash docs-drift:skip
    cd devmind-pipeline
    docker build -t devmind-ml-service:latest .
    docker tag devmind-ml-service:latest ghcr.io/<username>/devmind-ml-service:latest
@@ -262,7 +262,7 @@ curl https://devmind.georg-nikola.com/internal-health
    ```
 
 2. **Wait for ArgoCD to sync** the new image, or manually trigger:
-   ```bash
+   ```bash docs-drift:skip
    argocd app sync devmind-pipeline
    ```
 

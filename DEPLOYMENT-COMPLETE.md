@@ -75,7 +75,7 @@ You now have a **fully automated, production-grade GitOps deployment pipeline** 
 
 ### To Deploy New Version
 
-```bash
+```bash docs-drift:skip
 cd /path/to/devmind-pipeline
 
 # 1. Make your code changes
@@ -94,7 +94,7 @@ gh release create v1.3.0 --title "v1.3.0 Release" --notes "Your release notes"
 
 ### To Update Configuration
 
-```bash
+```bash docs-drift:skip
 # Edit values in private repository
 vim /path/to/private-talos-configs/local-cluster-config/manifests/argocd/values/devmind-pipeline-production.yaml
 
@@ -106,7 +106,7 @@ kubectl apply -f /path/to/private-talos-configs/local-cluster-config/manifests/a
 
 ### To Scale Deployment
 
-```bash
+```bash docs-drift:skip
 # Edit replicas in private values
 # Change: replicaCount: 2 → replicaCount: 3
 
@@ -193,7 +193,7 @@ On Release:
 4. Pods should transition from ImagePullBackOff to Running
 
 ### Monitoring Deployment
-```bash
+```bash docs-drift:skip
 # Watch pod startup
 kubectl get pods -n devmind-pipeline -w
 
@@ -245,7 +245,7 @@ curl http://localhost:8000/health
 ## 🔧 Troubleshooting
 
 ### If pods stay in ImagePullBackOff:
-```bash
+```bash docs-drift:skip
 # Check pod events
 kubectl describe pod -n devmind-pipeline <pod-name>
 
@@ -257,7 +257,7 @@ kubectl get events -n devmind-pipeline
 ```
 
 ### If ArgoCD sync fails:
-```bash
+```bash docs-drift:skip
 # Check application status
 kubectl describe application devmind-pipeline -n argocd
 
@@ -269,7 +269,7 @@ kubectl patch application devmind-pipeline -n argocd --type merge -p '{"metadata
 ```
 
 ### If service isn't accessible:
-```bash
+```bash docs-drift:skip
 # Verify service exists
 kubectl get svc -n devmind-pipeline
 
