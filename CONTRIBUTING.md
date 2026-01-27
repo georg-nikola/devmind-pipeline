@@ -128,7 +128,7 @@ Describe the tests you ran and how to reproduce
 - **Docstrings**: Use Google-style docstrings
 
 Example:
-```python
+```python docs-drift:skip
 def optimize_build(
     project_name: str,
     dependencies: List[str],
