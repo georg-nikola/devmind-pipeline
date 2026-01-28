@@ -35,7 +35,7 @@ jobs:
           python-version: '3.11'
 
       - name: Run docs-drift
-        uses: georg-nikola/docs-drift@v0.3
+        uses: georg-nikola/docs-drift@v0.3.1
         with:
           config: docs-drift.yml
           changed-only: ${{ github.event_name == 'pull_request' }}
