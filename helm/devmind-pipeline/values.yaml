@@ -81,23 +81,25 @@ securityContext:
     type: RuntimeDefault
 
 # Health checks
+# Use /internal-health (unauthenticated) for kubelet probes.
+# /health requires X-API-Key and is meant for external dashboards.
 healthChecks:
   startup:
     enabled: true
-    path: /health
+    path: /internal-health
     initialDelaySeconds: 10
     periodSeconds: 5
     timeoutSeconds: 3
     failureThreshold: 30
   liveness:
     enabled: true
-    path: /health
+    path: /internal-health
     periodSeconds: 10
     timeoutSeconds: 3
     failureThreshold: 3
   readiness:
     enabled: true
-    path: /health
+    path: /internal-health
     periodSeconds: 5
     timeoutSeconds: 3
     failureThreshold: 3
